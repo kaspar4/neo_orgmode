@@ -1,0 +1,46 @@
+- name: Check directories
+  stat:
+    path: "{{ home_dir }}/.emacs.d"
+  register: emacs_dir
+
+- debug: var=emacs_dir.stat.path
+
+- name: Check for chemacs2
+  stat:
+    path: "{{ home_dir }}/.emacs.d/chemacs.el"
+  register: chemacs_file
+
+- name: backup directory
+  command: mv "{{ home_dir }}/.emacs.d" "{{ home_dir }}/.emacs.d.backup"
+  when: ( not chemacs_file.stat.exists ) and emacs_dir.stat.exists
+
+- name: Check directories
+  stat:
+    path: "{{ home_dir }}/.emacs.d"
+  register: emacs_dir
+
+- name: Install chemacs2
+  git:
+    repo: "https://github.com/plexus/chemacs2.git"
+    dest: "{{ home_dir }}/.emacs.d"
+  when: not emacs_dir.stat.exists
+
+- name: Get Emacs neo configuration
+  ansible.builtin.git:
+    repo: "https://github.com/kaspar4/neo.git"
+    dest: "{{ home_dir }}/neo"
+    depth: 1
+
+- name: Get Spacemacs
+  ansible.builtin.git:
+    repo: "https://github.com/syl20bnr/spacemacs"
+    dest: "{{ home_dir }}/spacemacs"
+    depth: 1
+    
+- name: Template a file to /etc/file.conf
+  ansible.builtin.template:
+    src: emacs_profiles_el.j2
+    dest: "{{ home_dir }}/.emacs-profiles.el"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: '0644'    

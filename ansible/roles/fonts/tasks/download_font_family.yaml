@@ -1,0 +1,16 @@
+---
+
+- name: Font Info
+  set_fact:
+    family: "{{item|split(':')|first}}"
+    source: "{{item|split(':')|last}}"
+
+- name: Check font
+  ansible.builtin.stat:
+    path: "{{font_base_directory}}/{{source}}/{{family}}"
+  register: font_dir
+
+- name: "Download {{family}} [from {{source}} fonts]"
+  ansible.builtin.command:
+    cmd: ./roles/fonts/scripts/download '{{ item }}' '{{ font_base_directory }}'
+  when: not font_dir.stat.exists

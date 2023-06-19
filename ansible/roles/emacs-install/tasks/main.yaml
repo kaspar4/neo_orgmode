@@ -1,0 +1,17 @@
+---
+
+# For testing, make it faster
+- name: Install build dependencies
+  include_tasks: emacs-dependencies.yaml
+
+- include_tasks: "install-from-source.yaml"
+  loop: "{{ emacs_versions }}"
+  
+# - name: Downloading Emacs '{{emacs_version}}'
+#   become: yes
+#   get_url:
+#     url: '{{emacs_ftp_url}}/emacs-{{emacs_version}}.tar.gz'
+#     dest: '{{emacs_build_dir}}'
+#     checksum: '{{emacs_sha256}}'
+#     mode: 0644
+    

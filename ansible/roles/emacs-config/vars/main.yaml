@@ -1,0 +1,5 @@
+emacs_distributions:
+  - name: spacemacs
+    url: https://github.com/syl20bnr/spacemacs
+  - name: neo
+    url: https://github.com/kaspar4/neo.git

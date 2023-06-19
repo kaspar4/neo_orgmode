@@ -1,0 +1,12 @@
+---
+
+- name: Set Emacs version
+  set_fact:
+    emacs_version: '{{ item.version }}'
+#    native: '{{ item.native }}'
+    source: '{{ item.source }}'
+    config: '{{ item.config|default([]) }}'
+    patch: '{{ item.patch|default("") }}'
+
+- include_tasks: "download.yaml"
+    

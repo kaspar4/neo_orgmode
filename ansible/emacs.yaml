@@ -1,0 +1,13 @@
+---
+- name: Ansible Playbook to setup a decent Emacs environment
+  hosts: localhost
+  vars:
+    home_dir: "{{ lookup('env', 'HOME') }}"
+    linux_user: "{{ lookup('env', 'USER') }}"
+  roles:
+  - { role: fonts, tags: [ 'font' ] }
+  - { role: emacs-install, tags: ['emacs'] }
+  - { role: emacs-config, tags: ['emacs'] }
+
+
+
